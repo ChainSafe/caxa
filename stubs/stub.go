@@ -11,13 +11,12 @@ import (
 	"io"
 	"log"
 	"os"
-	"os/exec"
-	"os/signal"
 	"path"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -123,29 +122,8 @@ func main() {
 		expandedCommand[key] = applicationDirectoryPlaceholderRegexp.ReplaceAllLiteralString(commandPart, applicationDirectory)
 	}
 
-	command := exec.Command(expandedCommand[0], append(expandedCommand[1:], os.Args[1:]...)...)
-	command.Stdin = os.Stdin
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-
-	// Pass signals through to the child process.
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan)
-	go func() {
-		for sig := range sigChan {
-			if command.Process != nil {
-				command.Process.Signal(sig)
-			}
-		}
-	}()
-
-	err = command.Run()
-	var exitError *exec.ExitError
-	if errors.As(err, &exitError) {
-		os.Exit(exitError.ExitCode())
-	} else if err != nil {
-		log.Fatalf("caxa stub: Failed to run command: %v", err)
-	}
+	syscall.Exec(expandedCommand[0], append(expandedCommand, os.Args[1:]...), os.Environ())
+	log.Fatalf("caxa stub: Failed to exec %s", expandedCommand[0])
 }
 
 // Adapted from https://github.com/golang/build/blob/db2c93053bcd6b944723c262828c90af91b0477a/internal/untar/untar.go and https://github.com/mholt/archiver/tree/v3.5.0

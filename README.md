@@ -327,7 +327,7 @@ It’s equivalent to the Go stub, except that it is smaller, because it’s just
 
 If you’re interested in one of these features, please send a Pull Request if you can, or at least reach out to me and mention your interest, and I may get to them.
 
-1. Other compression algorithms. Currently caxa uses tarballs, which are ubiquitous and reasonably efficient in terms of compression/uncompression times and archive size. But there are better algorithms out there… (See <https://github.com/ChainSafe/caxa/issues/1>.)
+1. Other compression algorithms. Currently caxa uses tarballs, which are ubiquitous and reasonably efficient in terms of compression/uncompression times and archive size. But there are better algorithms out there… (See <https://github.com/leafac/caxa/issues/1>.)
 
 2. Add support for signing the executables. There are limitations on the kinds of executables that are signable, and a self-extracting archive of the kind that caxa produces may be unsignable (I know very little about this…). A solution could be use Go’s support for embedding data in the binary (which landed in Go 1.16). Of course this would require the person packaging a project to have a working Go build system. Another solution would be to manipulate the executables as data structures, instead of just appending stuff at the end. Go has facilities for this in the standard library, but then the packager itself (not only the stubs) would have to be written in Go, and creating packages on the command line by simply concatenating files would be impossible.
 
@@ -351,7 +351,7 @@ It works by patching the Node.js executable with a proxy around [`fs`](https://g
 
 Unfortunately, this approach has a few issues:
 
-1. The Node.js patches must be kept up-to-date. For example, when `fs/promises` became a thing, the `fs` proxy didn’t support it. It was a subtle and surprising issue that only arises in the packaged version of the application. (For the fix, see my fork of pkg, [@leafac/pkg](https://github.com/ChainSafe/pkg) (which has been deprecated now that caxa has been released).)
+1. The Node.js patches must be kept up-to-date. For example, when `fs/promises` became a thing, the `fs` proxy didn’t support it. It was a subtle and surprising issue that only arises in the packaged version of the application. (For the fix, see my fork of pkg, [@leafac/pkg](https://github.com/leafac/pkg) (which has been deprecated now that caxa has been released).)
 
 2. The patched Node.js distributions must be updated with each new Node.js release. At the time of this writing they’re [lagging behind by half an year](https://github.com/vercel/pkg-fetch/releases) (v14.4.0, while the latest LTS is v14.16.0). That’s new features and security updates you may not be getting. (See https://github.com/yao-pkg/pkg-binaries for a seemingly abandoned attempt at automating the patching process that could improve on this situation. Of course, manual intervention would still be required every time the patches become incompatible with Node.js upstream.)
 
@@ -565,7 +565,7 @@ Hotfix of v3.0.0 whose binary detection didn’t work when executed from `npx` �
 
 #### v3.0.0 · 2022-10-15
 
-This version modernizes the codebase in preparation to add new features, for example, the much anticipated <https://github.com/ChainSafe/caxa/pull/60>.
+This version modernizes the codebase in preparation to add new features, for example, the much anticipated <https://github.com/leafac/caxa/pull/60>.
 
 It doesn’t add or remove features, yet it’s a major version bump because it includes the following backwards-incompatible changes:
 
@@ -577,7 +577,7 @@ It doesn’t add or remove features, yet it’s a major version bump because it 
 - Added a new stub strategy: Shell Stub. It’s a simple Bash script that does the same as the Go stub, except that it takes less space (about 10 lines as opposed to a 2MB Go binary), but it depends on some tools being installed on the end-user machine, for example, `tar`, `tail`, and so forth.
 - Simplified the build/distribution of stubs.
   - Cross-compile the stubs, to simplify the GitHub Actions architecture. We were already cross-compiling for macOS ARM, so that isn’t a big loss. Most bugs that may arise from this decision would be bugs in the Go cross-compiler, which is unlikely.
-  - Distribute the stubs with the npm package to avoid issues like: https://github.com/ChainSafe/caxa/issues/26, https://github.com/ChainSafe/caxa/pull/28, https://github.com/ChainSafe/caxa/issues/31, and https://github.com/ChainSafe/caxa/pull/32. If you wish to verify that the stubs really were compiled from `stubs/stub.go`, you may run `npm run prepare:stubs`, because the Go compiler appears to be deterministic and always produce the same binaries given the same source (at least that’s what happened in my tests).
+  - Distribute the stubs with the npm package to avoid issues like: https://github.com/leafac/caxa/issues/26, https://github.com/leafac/caxa/pull/28, https://github.com/leafac/caxa/issues/31, and https://github.com/leafac/caxa/pull/32. If you wish to verify that the stubs really were compiled from `stubs/stub.go`, you may run `npm run prepare:stubs`, because the Go compiler appears to be deterministic and always produce the same binaries given the same source (at least that’s what happened in my tests).
   - Check the stubs in version control, to simplify distribution and the workflow of people who want to help in the JavaScript part of caxa and who may not want to setup Go.
   - Distribute only one version of the stub for Linux ARMv6 & Linux ARMv7. They happened to be the same binary, anyway—it seems that the Go compiler doesn’t differentiate between these architectures.
 - Added the `--stub` advanced option to specify a custom stub.

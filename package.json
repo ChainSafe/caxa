@@ -1,6 +1,6 @@
 {
   "name": "@chainsafe/caxa",
-  "version": "1.0.0",
+  "version": "3.0.2",
   "description": "Package Node.js applications into executable binaries",
   "keywords": [
     "packing",

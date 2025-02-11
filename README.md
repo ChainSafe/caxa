@@ -41,7 +41,7 @@ That’s a miscommunication that I’ll address in the documentation.
 <h3 align="center">📦 Package Node.js applications into executable binaries 📦</h3>
 <p align="center">
 <a href="https://github.com/ChainSafe/caxa"><img src="https://img.shields.io/badge/Source---" alt="Source"></a>
-<a href="https://www.npmjs.com/package/caxa"><img alt="Package" src="https://badge.fury.io/js/caxa.svg"></a>
+<a href="https://www.npmjs.com/package/@chainsafe/caxa"><img alt="Package" src="https://badge.fury.io/js/caxa.svg"></a>
 <a href="https://github.com/ChainSafe/caxa/actions"><img src="https://github.com/ChainSafe/caxa/workflows/.github/workflows/main.yml/badge.svg" alt="Continuous Integration"></a>
 </p>
 

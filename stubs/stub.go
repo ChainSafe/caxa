@@ -122,7 +122,7 @@ func main() {
 		expandedCommand[key] = applicationDirectoryPlaceholderRegexp.ReplaceAllLiteralString(commandPart, applicationDirectory)
 	}
 
-	syscall.Exec(expandedCommand[0], append(expandedCommand, os.Args[1:]...), os.Environ())
+	syscall.Exec(expandedCommand[0], append(append([]string{expandedCommand[0]}, expandedCommand[1:]...), os.Args[1:]...), os.Environ())
 	log.Fatalf("caxa stub: Failed to exec %s", expandedCommand[0])
 }
 
